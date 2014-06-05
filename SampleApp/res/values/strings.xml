@@ -4,21 +4,19 @@
     <string name="app_name">Bufunfa</string>
     <string name="action_settings">Configurações</string>
     <string name="hello_world">Hello world!</string>
-    <string name="task_blank">Entre com um valor</string>
-    <string name="id_null">Insira um Email</string>
-    <string name="pw_null">Insira uma senha</string>
-    <string name="loading_message">Aguarde, por favor...</string>
-    <string name="login_tital_big">Autenticação</string>
-    <string name="login_tital_small">Entrar na Bufunfa</string>
-    <string name="edit_id">Insira o Email</string>
-    <string name="edit_pass">Insira a senha</string>
-    <string name="btn_login">Entrar</string>
-    <string name="list_view_tital">Minha Bufunfa</string>
-    <string name="add_item">Adicionar</string>
-    <string name="logout">Sair</string>
-    <string name="dsp_url">Enter DSP URL</string>
-    <string name="dsp_null">Enter DSP url</string>
-    <string name="textSplash">Gerenciador Financeiro</string>
-    <string name="title_activity_income">IncomeActivity</string>
-
+	<string name="task_blank">Entre com um valor</string>
+	<string name="id_null">Insira um Email</string>
+	<string name="pw_null">Insira uma senha</string>
+	<string name="loading_message">Aguarde, por favor...</string>
+	<string name="login_tital_big">Autenticação</string>
+	<string name="login_tital_small">Entrar na Bufunfa</string>
+	<string name="edit_id">Insira o Email</string>
+	<string name="edit_pass">Insira a senha</string>
+	<string name="btn_login">Entrar</string>
+	<string name="list_view_tital">Minha Bufunfa</string>
+	<string name="add_item">Adicionar</string>
+	<string name="logout">Sair</string>
+	<string name="dsp_url">Enter DSP URL</string>
+	<string name="dsp_null">Enter DSP url</string>
+	<string name="textSplash">Gerenciador Financeiro</string>
 </resources>
