@@ -12,7 +12,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:src="@drawable/ic_launcher" />
+        android:src="@drawable/ic_x" />
 
     <View
         android:id="@+id/Separator"

@@ -17,8 +17,8 @@ public class SplashActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		try{
 			ActionBar actionbar = getActionBar();
-			actionbar.setTitle("");
-			actionbar.setIcon(R.drawable.df_logo_txt);
+			//actionbar.setTitle("");
+			//actionbar.setIcon(R.drawable.df_logo_txt);
 		}catch(Exception e){
 
 		}

@@ -10,4 +10,5 @@ public interface IAppConstants {
 	public String LOGOUT = "logout";
 	public String APP_NAME = "Bufunfa";
 	public String DSP_URL_SUFIX = "/rest";
+	public String DSP_URL_APP = "https://dsp-bufunfa.cloud.dreamfactory.com";
 }

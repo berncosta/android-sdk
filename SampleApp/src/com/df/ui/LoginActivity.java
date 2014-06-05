@@ -28,7 +28,7 @@ import com.dreamfactory.model.Login;
 import com.dreamfactory.model.Session;
 
 public class LoginActivity extends Activity {//implements GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener{
-	private EditText editTextUserId, editTextUserPassword, editTextDspUrl;
+	private EditText editTextUserId, editTextUserPassword;
 	private Button btnSubmitLogin;
 	private ProgressDialog progressDialog;
 	private String userID,userPass, dspUrl;
@@ -38,8 +38,8 @@ public class LoginActivity extends Activity {//implements GooglePlayServicesClie
 		super.onCreate(savedInstanceState);
 		try{
 			ActionBar actionbar = getActionBar();
-			actionbar.setTitle("");
-			actionbar.setIcon(R.drawable.df_logo_txt);
+			//actionbar.setTitle("");
+			//actionbar.setIcon(R.drawable.df_logo_txt);
 		}catch(Exception e){
 
 		}
@@ -47,7 +47,6 @@ public class LoginActivity extends Activity {//implements GooglePlayServicesClie
 		progressDialog = new ProgressDialog(LoginActivity.this);
 		progressDialog.setMessage(getText(R.string.loading_message));
 
-		editTextDspUrl = (EditText)findViewById(R.id.edit_text_dsp);
 		editTextUserId = (EditText) findViewById(R.id.edit_text_user_id);
 		editTextUserPassword = (EditText) findViewById(R.id.edit_text_user_pass);
 		
@@ -58,11 +57,8 @@ public class LoginActivity extends Activity {//implements GooglePlayServicesClie
 		userID = PrefUtil.getString(getApplicationContext(), IAppConstants.EMAIL, "");
 		userPass = PrefUtil.getString(getApplicationContext(), IAppConstants.PWD, "");
 		
-		dspUrl = PrefUtil.getString(getApplicationContext(), IAppConstants.DSP_URL, "");
-		
 		editTextUserId.setText(userID);
 		editTextUserPassword.setText(userPass);
-		editTextDspUrl.setText(dspUrl);
 
 
 		btnSubmitLogin.setOnClickListener(new OnClickListener() {			
@@ -79,7 +75,8 @@ public class LoginActivity extends Activity {//implements GooglePlayServicesClie
 	public Boolean isValidEntries(){
 		String User_ID = editTextUserId.getText().toString();
 		String User_Pass = editTextUserPassword.getText().toString();
-		dspUrl = editTextDspUrl.getText().toString();
+		//dspUrl = editTextDspUrl.getText().toString();
+		dspUrl = IAppConstants.DSP_URL_APP;
 
 		if(User_ID.length()==0){
 			Toast.makeText(LoginActivity.this, getText(R.string.id_null), Toast.LENGTH_LONG).show();
