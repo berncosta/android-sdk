@@ -15,9 +15,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.df.ui.R;
 import com.df.utils.IAppConstants;
 import com.df.utils.PrefUtil;
-import com.dfdemo.R;
 import com.dreamfactory.api.DbApi;
 import com.dreamfactory.client.ApiException;
 import com.dreamfactory.model.Record;

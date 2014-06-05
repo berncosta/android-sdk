@@ -22,7 +22,6 @@ import android.widget.Toast;
 
 import com.df.utils.IAppConstants;
 import com.df.utils.PrefUtil;
-import com.dfdemo.R;
 import com.dreamfactory.api.UserApi;
 import com.dreamfactory.model.Login;
 import com.dreamfactory.model.Session;

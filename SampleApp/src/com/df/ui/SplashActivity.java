@@ -8,7 +8,6 @@ import android.os.Bundle;
 
 import com.df.utils.IAppConstants;
 import com.df.utils.PrefUtil;
-import com.dfdemo.R;
 
 public class SplashActivity extends Activity {
 

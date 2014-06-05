@@ -20,7 +20,7 @@ import com.dreamfactory.api.DbApi;
 import com.dreamfactory.model.Record;
 import com.dreamfactory.model.Records;
 
-public class IncomeActivity extends Activity {
+public class ExpensesActivity extends Activity {
 	private Button buttonAdd,buttonLogout;
 	private EditText editTextAddTask;
 	private ListView list_view;
@@ -28,7 +28,7 @@ public class IncomeActivity extends Activity {
 	private ToDoAdapter adapter = null;
 	private String dsp_url;
 	private String session_id;
-	private TextView totalIncome;
+	private TextView totalExpenses;
 	Float total = (float) 0.00;
 
 	@Override
@@ -45,9 +45,9 @@ public class IncomeActivity extends Activity {
 		dsp_url += IAppConstants.DSP_URL_SUFIX;
 		session_id = PrefUtil.getString(getApplicationContext(), IAppConstants.SESSION_ID);
 
-		setContentView(R.layout.activity_income);
-		totalIncome = (TextView) findViewById(R.id.textView_tital);
-		progressDialog = new ProgressDialog(IncomeActivity.this);
+		setContentView(R.layout.activity_expenses);
+		totalExpenses = (TextView) findViewById(R.id.textView_tital);
+		progressDialog = new ProgressDialog(ExpensesActivity.this);
 		progressDialog.setMessage(getString((R.string.loading_message)));
 		list_view = (ListView) findViewById(R.id.list_view_strik_text);
 		editTextAddTask = (EditText) findViewById(R.id.editText_add_task);
@@ -58,11 +58,12 @@ public class IncomeActivity extends Activity {
 			public void onClick(View v) {
 				String task = editTextAddTask.getText().toString();
 				if(task.length()==0){
-					Toast.makeText(IncomeActivity.this, getText(R.string.task_blank), Toast.LENGTH_SHORT).show();
+					Toast.makeText(ExpensesActivity.this, getText(R.string.task_blank), Toast.LENGTH_SHORT).show();
 				}
 				else {
 					CreateRecordTask addToDoItem = new CreateRecordTask();
 					addToDoItem.execute(task);
+					
 				}
 			}
 		});
@@ -104,7 +105,7 @@ public class IncomeActivity extends Activity {
 			dbApi.addHeader("X-DreamFactory-Session-Token", session_id);
 			dbApi.setBasePath(dsp_url);
 			try {
-				Records records = dbApi.getRecords(IAppConstants.TABLE_NAME, null, "complete=1", null, null, null, null, null, true, null, null);
+				Records records = dbApi.getRecords(IAppConstants.TABLE_NAME, null, "complete=0", null, null, null, null, null, true, null, null);
 				log(records.toString());
 				return records;
 			} catch (Exception e) {
@@ -119,17 +120,16 @@ public class IncomeActivity extends Activity {
 				progressDialog.cancel();
 			}
 			if(records != null){ // success
-				adapter = new ToDoAdapter(IncomeActivity.this, records.getRecord());
+				adapter = new ToDoAdapter(ExpensesActivity.this, records.getRecord());
 				list_view.setAdapter(adapter);
 				
 				//soma os valores das receitas e coloca na tela
-
+				
 				for (Record rec:records.getRecord()){
 					total += Float.parseFloat(rec.getName());
 				}
 				
-				totalIncome.setText("Total Receita: "+total.toString());
-				
+				totalExpenses.setText("Total Despesas: "+total.toString());
 				
 			}else{ // some error show dialog
 				Toast.makeText(getApplicationContext(), errorMsg, Toast.LENGTH_LONG).show();
@@ -151,7 +151,7 @@ public class IncomeActivity extends Activity {
 			String todoItem = params[0];
 			Record record = new Record();
 			record.setName(todoItem);
-			record.setComplete(true);
+			record.setComplete(false);
 
 			DbApi dbApi = new DbApi();
 			dbApi.setBasePath(dsp_url);
@@ -178,9 +178,10 @@ public class IncomeActivity extends Activity {
 				editTextAddTask.setText("");
 				
 				total += Float.parseFloat(record.getName());
-				totalIncome.setText("Total Receita: "+total.toString());
+				totalExpenses.setText("Total Despesas: "+total.toString());
+				
 			}else {				
-				Toast.makeText(IncomeActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
+				Toast.makeText(ExpensesActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
 			}
 		}
 	}

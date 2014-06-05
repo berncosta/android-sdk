@@ -1,6 +1,5 @@
 package com.df.ui;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -11,18 +10,17 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
+
+import com.df.ui.R;
 import com.df.adapters.ToDoAdapter;
 import com.df.utils.IAppConstants;
 import com.df.utils.PrefUtil;
-import com.dfdemo.R;
-import com.dreamfactory.api.DbApi;
 import com.dreamfactory.model.Record;
 import com.dreamfactory.model.Records;
 
 public class MainActivity extends Activity {
-	private Button buttonAdd,buttonLogout;
+	private Button buttonIncome,buttonExpenses,buttonLogout;
 	private EditText editTextAddTask;
 	private ListView list_view;
 	private ProgressDialog progressDialog;
@@ -34,7 +32,7 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		try{
-			ActionBar actionbar = getActionBar();
+			//ActionBar actionbar = getActionBar();
 			//actionbar.setTitle("");
 			//actionbar.setIcon(R.drawable.df_logo_txt);
 		}catch(Exception e){
@@ -47,22 +45,27 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		progressDialog = new ProgressDialog(MainActivity.this);
 		progressDialog.setMessage(getString((R.string.loading_message)));
-		list_view = (ListView) findViewById(R.id.list_view_strik_text);
-		editTextAddTask = (EditText) findViewById(R.id.editText_add_task);
-		buttonAdd = (Button) findViewById(R.id.btnButton);
-		buttonLogout = (Button)findViewById(R.id.btnLogout);
-		buttonAdd.setOnClickListener(new OnClickListener() {
+
+
+		buttonIncome = (Button) findViewById(R.id.btnIncome);
+		buttonExpenses = (Button) findViewById(R.id.btnExpenses);
+		buttonLogout = (Button) findViewById(R.id.btnLogout);
+		
+		buttonIncome.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				String task = editTextAddTask.getText().toString();
-				if(task.length()==0){
-					Toast.makeText(MainActivity.this, getText(R.string.task_blank), Toast.LENGTH_SHORT).show();
-				}
-				else {
-					CreateRecordTask addToDoItem = new CreateRecordTask();
-					addToDoItem.execute(task);
-				}
+				goToIncome();
 			}
+
+			
+		});
+		buttonExpenses.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				goToExpenses();
+			}
+
+			
 		});
 		buttonLogout.setOnClickListener(new OnClickListener() {
 			@Override
@@ -70,8 +73,24 @@ public class MainActivity extends Activity {
 				logout();
 			}
 		});
-		GetRecordsTask listItem = new GetRecordsTask();
-		listItem.execute();
+
+	}
+	
+	private void goToIncome() {
+		// TODO Auto-generated method stub
+		
+		Intent intent = new Intent(getApplicationContext(), IncomeActivity.class);
+		startActivity(intent);
+		//finish();
+		
+	}
+	
+	private void goToExpenses() {
+		// TODO Auto-generated method stub
+		
+		Intent intent = new Intent(getApplicationContext(), ExpensesActivity.class);
+		startActivity(intent);
+		
 	}
 
 
@@ -97,32 +116,12 @@ public class MainActivity extends Activity {
 
 		@Override
 		protected Records doInBackground(Void... params) {
-			DbApi dbApi = new DbApi();
-			dbApi.addHeader("X-DreamFactory-Application-Name", IAppConstants.APP_NAME);
-			dbApi.addHeader("X-DreamFactory-Session-Token", session_id);
-			dbApi.setBasePath(dsp_url);
-			try {
-				Records records = dbApi.getRecords(IAppConstants.TABLE_NAME, null, null, null, null, null, null, null, true, null, null);
-				log(records.toString());
-				return records;
-			} catch (Exception e) {
-				e.printStackTrace();
-				errorMsg = e.getMessage();
-			}
+			
 			return null;
 		}
 		@Override
 		protected void onPostExecute(Records records) {
-			if(progressDialog != null && progressDialog.isShowing()){
-				progressDialog.cancel();
-			}
-			if(records != null){ // success
-				adapter = new ToDoAdapter(MainActivity.this, records.getRecord());
-				list_view.setAdapter(adapter);
-			}else{ // some error show dialog
-				Toast.makeText(getApplicationContext(), errorMsg, Toast.LENGTH_LONG).show();
-				logout();
-			}
+			
 		}
 	}
 
@@ -136,36 +135,11 @@ public class MainActivity extends Activity {
 
 		@Override
 		protected Record doInBackground(String... params) {
-			String todoItem = params[0];
-			Record record = new Record();
-			record.setName(todoItem);
-
-			DbApi dbApi = new DbApi();
-			dbApi.setBasePath(dsp_url);
-			dbApi.addHeader("X-DreamFactory-Application-Name", IAppConstants.APP_NAME);
-			dbApi.addHeader("X-DreamFactory-Session-Token", session_id);
-			try {
-				String id = ""+System.currentTimeMillis();
-				Record resultRecord = dbApi.createRecord(IAppConstants.TABLE_NAME, id, null, record, null, null);
-				resultRecord.setName(todoItem);
-				log(resultRecord.toString());
-				return resultRecord;
-			} catch (Exception e) {
-				e.printStackTrace();
-				errorMsg = e.getMessage();
-			}
 			return null;
 		}
 		@Override
 		protected void onPostExecute(Record record) {	
-			progressDialog.cancel();
-			if(record != null){
-				adapter.addTask(record);
-				adapter.notifyDataSetChanged();
-				editTextAddTask.setText("");
-			}else {				
-				Toast.makeText(MainActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
-			}
+			//null
 		}
 	}
 

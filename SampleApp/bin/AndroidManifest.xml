@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.dfdemo"
+    package="com.df.ui"
     android:versionCode="1"
     android:versionName="1.0" >
 
-     <uses-sdk
+    <uses-sdk
         android:minSdkVersion="10"
         android:targetSdkVersion="19" />
 
@@ -28,13 +28,29 @@
         </activity>
         <activity
             android:name="com.df.ui.LoginActivity"
-			android:icon="@drawable/ic_launcher"
+            android:icon="@drawable/ic_launcher"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.df.ui.MainActivity"
             android:icon="@drawable/ic_launcher"
             android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="IncomeActivity"
+            android:label="@string/title_activity_income"
+            android:parentActivityName="com.df.ui.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.df.ui.MainActivity" />
+        </activity>
+        <activity
+            android:name="ExpensesActivity"
+            android:label="@string/title_activity_expenses"
+            android:parentActivityName="com.df.ui.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.df.ui.MainActivity" />
         </activity>
     </application>
 
