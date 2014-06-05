@@ -36,33 +36,31 @@ public final class R {
         public static final int vertical_line=0x7f020008;
     }
     public static final class id {
-        public static final int Separator=0x7f09000c;
-        public static final int action_settings=0x7f090012;
-        public static final int btnButton=0x7f090005;
-        public static final int btnLogout=0x7f090006;
-        public static final int button_submit_login=0x7f090011;
-        public static final int container=0x7f090000;
-        public static final int editText_add_task=0x7f090007;
-        public static final int edit_text_user_id=0x7f09000f;
-        public static final int edit_text_user_pass=0x7f090010;
-        public static final int icon_list=0x7f09000a;
-        public static final int layout_button=0x7f090004;
-        public static final int list_view_strik_text=0x7f090002;
-        public static final int newlayout=0x7f090003;
-        public static final int textView1=0x7f090008;
-        public static final int textView2=0x7f090009;
-        public static final int textView_tital=0x7f090001;
-        public static final int textView_user_pass=0x7f09000e;
-        public static final int text_view_list=0x7f09000b;
-        public static final int text_view_user_id=0x7f09000d;
+        public static final int Separator=0x7f09000b;
+        public static final int action_settings=0x7f090011;
+        public static final int btnButton=0x7f090004;
+        public static final int btnLogout=0x7f090005;
+        public static final int button_submit_login=0x7f090010;
+        public static final int editText_add_task=0x7f090006;
+        public static final int edit_text_user_id=0x7f09000e;
+        public static final int edit_text_user_pass=0x7f09000f;
+        public static final int icon_list=0x7f090009;
+        public static final int layout_button=0x7f090003;
+        public static final int list_view_strik_text=0x7f090001;
+        public static final int newlayout=0x7f090002;
+        public static final int textView1=0x7f090007;
+        public static final int textView2=0x7f090008;
+        public static final int textView_tital=0x7f090000;
+        public static final int textView_user_pass=0x7f09000d;
+        public static final int text_view_list=0x7f09000a;
+        public static final int text_view_user_id=0x7f09000c;
     }
     public static final class layout {
         public static final int activity_income=0x7f030000;
         public static final int activity_main=0x7f030001;
         public static final int activity_splash=0x7f030002;
-        public static final int fragment_income=0x7f030003;
-        public static final int list_item=0x7f030004;
-        public static final int login=0x7f030005;
+        public static final int list_item=0x7f030003;
+        public static final int login=0x7f030004;
     }
     public static final class menu {
         public static final int main=0x7f080000;
