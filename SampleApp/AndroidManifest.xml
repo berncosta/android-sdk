@@ -4,8 +4,8 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-     <uses-sdk
-        android:minSdkVersion="10"
+    <uses-sdk
+        android:minSdkVersion="11"
         android:targetSdkVersion="19" />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -28,13 +28,21 @@
         </activity>
         <activity
             android:name="com.df.ui.LoginActivity"
-			android:icon="@drawable/ic_launcher"
+            android:icon="@drawable/ic_launcher"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.df.ui.MainActivity"
             android:icon="@drawable/ic_launcher"
             android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.dfdemo.IncomeActivity"
+            android:label="@string/title_activity_income"
+            android:parentActivityName="com.df.ui.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.df.ui.MainActivity" />
         </activity>
     </application>
 
