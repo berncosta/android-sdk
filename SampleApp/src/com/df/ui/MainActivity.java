@@ -83,6 +83,16 @@ public class MainActivity extends Activity {
 
 	}
 	
+	public void onRestart(Bundle savedInstanceState){
+		GetRecordsTask listItem = new GetRecordsTask();
+		listItem.execute();
+	}
+	
+	public void onResume(Bundle savedInstanceState){
+		GetRecordsTask listItem = new GetRecordsTask();
+		listItem.execute();
+	}
+	
 	class GetRecordsTask extends AsyncTask<Void, Records, Records>{
 		private String errorMsg;
 

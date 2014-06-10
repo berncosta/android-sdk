@@ -89,6 +89,10 @@ public class IncomeActivity extends Activity {
 		GetRecordsTask listItem = new GetRecordsTask();
 		listItem.execute();
 	}
+	
+	public void onBackPressed(){
+		finish();
+	}
 
 
 	private void logout(){
