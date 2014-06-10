@@ -1,7 +1,9 @@
 package com.df.ui;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -69,7 +71,7 @@ public class IncomeActivity extends Activity {
 				String valor = editTextAddTask.getText().toString();
 				String data = buttonDate.getText().toString();
 				String cat = spinnerCategoria.getSelectedItem().toString();
-				if(valor.length()==0 || data.length()==0 || cat.length()==0){
+				if(valor.length()==0 || data.length()==0 || data.length()<5 || cat.length()==0){
 					Toast.makeText(IncomeActivity.this, getText(R.string.task_blank), Toast.LENGTH_SHORT).show();
 				}
 				else {
@@ -122,7 +124,7 @@ public class IncomeActivity extends Activity {
 			dbApi.addHeader("X-DreamFactory-Session-Token", session_id);
 			dbApi.setBasePath(dsp_url);
 			try {
-				Records records = dbApi.getRecords(IAppConstants.TABLE_NAME, null, "tipo='r'", null, null, null, null, null, true, null, null);
+				Records records = dbApi.getRecords(IAppConstants.TABLE_NAME, null, "tipo='r'", null, null, "data%20DESC", null, null, true, null, null);
 				log(records.toString());
 				return records;
 			} catch (Exception e) {
@@ -172,7 +174,15 @@ public class IncomeActivity extends Activity {
 			Record record = new Record();
 			record.setValor(valor);
 			record.setTipo("r"); //receita
-			record.setData(data);
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			Date pData = new Date(0);
+			try {
+				pData = sdf.parse(data);
+			} catch (ParseException e1) {
+				e1.printStackTrace();
+			}
+			String sData = sdf.format(pData);
+			record.setData(sData);
 			record.setCategoria(cat);
 
 			DbApi dbApi = new DbApi();
@@ -231,12 +241,8 @@ public class IncomeActivity extends Activity {
 			view.updateDate(year,month,day);
 			cal.set(year,month,day);
 			changeDateButton();
-
-
-			
+	
 		}
-		
-		
 
 		public Calendar getCalendar(){
 			return cal;

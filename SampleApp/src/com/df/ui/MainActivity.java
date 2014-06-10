@@ -108,7 +108,7 @@ public class MainActivity extends Activity {
 			dbApi.addHeader("X-DreamFactory-Session-Token", session_id);
 			dbApi.setBasePath(dsp_url);
 			try {
-				Records records = dbApi.getRecords(IAppConstants.TABLE_NAME, null, null, null, null, null, null, null, true, null, null);
+				Records records = dbApi.getRecords(IAppConstants.TABLE_NAME, null, null, null, null, null, "tipo%2C%20valor", null, true, null, null);
 				log(records.toString());
 				return records;
 			} catch (Exception e) {

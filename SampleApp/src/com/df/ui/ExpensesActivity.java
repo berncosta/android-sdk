@@ -1,7 +1,9 @@
 package com.df.ui;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -70,7 +72,7 @@ public class ExpensesActivity extends Activity {
 				String data = buttonDate.getText().toString();
 				String cat = spinnerCategoria.getSelectedItem().toString();
 				
-				if(valor.length()==0 | data.length()==0 | cat.length()==0){
+				if(valor.length()==0 || data.length()==0 || data.length()<5 || cat.length()==0){
 					Toast.makeText(ExpensesActivity.this, getText(R.string.task_blank), Toast.LENGTH_SHORT).show();
 				}
 				else {
@@ -120,7 +122,7 @@ public class ExpensesActivity extends Activity {
 			dbApi.addHeader("X-DreamFactory-Session-Token", session_id);
 			dbApi.setBasePath(dsp_url);
 			try {
-				Records records = dbApi.getRecords(IAppConstants.TABLE_NAME, null, "tipo='d'", null, null, null, null, null, true, null, null);
+				Records records = dbApi.getRecords(IAppConstants.TABLE_NAME, null, "tipo='d'", null, null, "data%20DESC", null, null, true, null, null);
 				log(records.toString());
 				return records;
 			} catch (Exception e) {
@@ -169,7 +171,15 @@ public class ExpensesActivity extends Activity {
 			Record record = new Record();
 			record.setValor(valor);
 			record.setTipo("d"); //despesa
-			record.setData(data);
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			Date pData = new Date(0);
+			try {
+				pData = sdf.parse(data);
+			} catch (ParseException e1) {
+				e1.printStackTrace();
+			}
+			String sData = sdf.format(pData);
+			record.setData(sData);
 			record.setCategoria(cat);
 
 			DbApi dbApi = new DbApi();

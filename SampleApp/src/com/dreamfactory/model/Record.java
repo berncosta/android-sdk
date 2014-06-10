@@ -1,8 +1,12 @@
 package com.dreamfactory.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
-import java.util.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
 public class Record {
   /* Array of field name-value pairs. */
   @JsonProperty("_field_")
@@ -42,10 +46,20 @@ public class Record {
   }
 
   public String getData() {
-	return data;
+	SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM/yyyy");
+	SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+	Date pData = new Date(0);
+	try {
+		pData = sdf2.parse(data);
+	} catch (ParseException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	String sData = sdf1.format(pData);
+	return sData;
 }
   public String getData(int i){
-	  return data.substring(0,i);
+	  return this.getData().substring(0,i);
   }
 public void setData(String data) {
 	this.data = data;
