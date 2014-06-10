@@ -1,6 +1,12 @@
 package com.df.ui;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -8,12 +14,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.df.adapters.ToDoAdapter;
+import com.df.ui.IncomeActivity.DatePickerFragment;
 import com.df.utils.IAppConstants;
 import com.df.utils.PrefUtil;
 import com.dreamfactory.api.DbApi;
@@ -21,7 +29,7 @@ import com.dreamfactory.model.Record;
 import com.dreamfactory.model.Records;
 
 public class ExpensesActivity extends Activity {
-	private Button buttonAdd,buttonLogout;
+	private static Button buttonAdd, buttonDate;
 	private EditText editTextAddTask;
 	private ListView list_view;
 	private ProgressDialog progressDialog;
@@ -30,6 +38,7 @@ public class ExpensesActivity extends Activity {
 	private String session_id;
 	private TextView totalExpenses;
 	Float total = (float) 0.00;
+	private static DatePickerFragment df = new DatePickerFragment();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +60,7 @@ public class ExpensesActivity extends Activity {
 		progressDialog.setMessage(getString((R.string.loading_message)));
 		list_view = (ListView) findViewById(R.id.list_view_strik_text);
 		editTextAddTask = (EditText) findViewById(R.id.editText_add_task);
-		buttonAdd = (Button) findViewById(R.id.btnButton);
-		buttonLogout = (Button)findViewById(R.id.btnLogout);
+		buttonAdd = (Button) findViewById(R.id.btnAdd);
 		buttonAdd.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -67,10 +75,12 @@ public class ExpensesActivity extends Activity {
 				}
 			}
 		});
-		buttonLogout.setOnClickListener(new OnClickListener() {
+		buttonDate = (Button) findViewById(R.id.btnDate);
+		buttonDate.setOnClickListener(new OnClickListener(){
 			@Override
-			public void onClick(View v) {
-				logout();
+			public void onClick(View v){
+				df.show(getFragmentManager(),"datePicker");
+			
 			}
 		});
 		GetRecordsTask listItem = new GetRecordsTask();
@@ -105,7 +115,7 @@ public class ExpensesActivity extends Activity {
 			dbApi.addHeader("X-DreamFactory-Session-Token", session_id);
 			dbApi.setBasePath(dsp_url);
 			try {
-				Records records = dbApi.getRecords(IAppConstants.TABLE_NAME, null, "complete=0", null, null, null, null, null, true, null, null);
+				Records records = dbApi.getRecords(IAppConstants.TABLE_NAME, null, "tipo='d'", null, null, null, null, null, true, null, null);
 				log(records.toString());
 				return records;
 			} catch (Exception e) {
@@ -126,7 +136,7 @@ public class ExpensesActivity extends Activity {
 				//soma os valores das receitas e coloca na tela
 				
 				for (Record rec:records.getRecord()){
-					total += Float.parseFloat(rec.getName());
+					total += Float.parseFloat(rec.getValor());
 				}
 				
 				totalExpenses.setText("Total Despesas: "+total.toString());
@@ -150,8 +160,8 @@ public class ExpensesActivity extends Activity {
 		protected Record doInBackground(String... params) {
 			String todoItem = params[0];
 			Record record = new Record();
-			record.setName(todoItem);
-			record.setComplete(false);
+			record.setValor(todoItem);
+			record.setTipo("d"); //despesa
 
 			DbApi dbApi = new DbApi();
 			dbApi.setBasePath(dsp_url);
@@ -160,7 +170,7 @@ public class ExpensesActivity extends Activity {
 			try {
 				String id = ""+System.currentTimeMillis();
 				Record resultRecord = dbApi.createRecord(IAppConstants.TABLE_NAME, id, null, record, null, null);
-				resultRecord.setName(todoItem);
+				resultRecord.setValor(todoItem);
 				log(resultRecord.toString());
 				return resultRecord;
 			} catch (Exception e) {
@@ -177,7 +187,7 @@ public class ExpensesActivity extends Activity {
 				adapter.notifyDataSetChanged();
 				editTextAddTask.setText("");
 				
-				total += Float.parseFloat(record.getName());
+				total += Float.parseFloat(record.getValor());
 				totalExpenses.setText("Total Despesas: "+total.toString());
 				
 			}else {				
@@ -188,5 +198,41 @@ public class ExpensesActivity extends Activity {
 
 	private void log(String message){
 		System.out.println("log: " + message);
+	}
+	
+public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener{
+		
+		private Calendar cal = Calendar.getInstance();
+		
+		@Override
+		public Dialog onCreateDialog(Bundle savedInstanceState){
+			final Calendar c = 	Calendar.getInstance();
+			int year = c.get(Calendar.YEAR);
+			int month = c.get(Calendar.MONTH);
+			int day = c.get(Calendar.DAY_OF_MONTH);
+			return new DatePickerDialog(getActivity(), this, year, month, day);
+		}
+
+		@Override
+		public void onDateSet(DatePicker view, int year, int month, int day) {
+			view.updateDate(year,month,day);
+			cal.set(year,month,day);
+			changeDateButton();
+
+
+			
+		}
+		
+		
+
+		public Calendar getCalendar(){
+			return cal;
+		}
+	}
+	
+	public static void changeDateButton() {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		buttonDate.setText(sdf.format(df.getCalendar().getTime()));
+		
 	}
 }

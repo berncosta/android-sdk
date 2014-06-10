@@ -1,6 +1,12 @@
 package com.df.ui;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -8,8 +14,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,8 +29,9 @@ import com.dreamfactory.model.Record;
 import com.dreamfactory.model.Records;
 
 public class IncomeActivity extends Activity {
-	private Button buttonAdd,buttonLogout;
+	private static Button buttonAdd, buttonDate;
 	private EditText editTextAddTask;
+	private Spinner spinnerCategoria;
 	private ListView list_view;
 	private ProgressDialog progressDialog;
 	private ToDoAdapter adapter = null;
@@ -30,6 +39,7 @@ public class IncomeActivity extends Activity {
 	private String session_id;
 	private TextView totalIncome;
 	Float total = (float) 0.00;
+	private static DatePickerFragment df = new DatePickerFragment();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,25 +61,29 @@ public class IncomeActivity extends Activity {
 		progressDialog.setMessage(getString((R.string.loading_message)));
 		list_view = (ListView) findViewById(R.id.list_view_strik_text);
 		editTextAddTask = (EditText) findViewById(R.id.editText_add_task);
-		buttonAdd = (Button) findViewById(R.id.btnButton);
-		buttonLogout = (Button)findViewById(R.id.btnLogout);
+		spinnerCategoria = (Spinner) findViewById(R.id.spinnerCat);
+		buttonAdd = (Button) findViewById(R.id.btnAdd);
 		buttonAdd.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				String task = editTextAddTask.getText().toString();
-				if(task.length()==0){
+				String valor = editTextAddTask.getText().toString();
+				String data = buttonDate.getText().toString();
+				String cat = spinnerCategoria.getSelectedItem().toString();
+				if(valor.length()==0 || data.length()==0 || cat.length()==0){
 					Toast.makeText(IncomeActivity.this, getText(R.string.task_blank), Toast.LENGTH_SHORT).show();
 				}
 				else {
 					CreateRecordTask addToDoItem = new CreateRecordTask();
-					addToDoItem.execute(task);
+					addToDoItem.execute(valor, data, cat);
 				}
 			}
 		});
-		buttonLogout.setOnClickListener(new OnClickListener() {
+		buttonDate = (Button) findViewById(R.id.btnDate);
+		buttonDate.setOnClickListener(new OnClickListener(){
 			@Override
-			public void onClick(View v) {
-				logout();
+			public void onClick(View v){
+				df.show(getFragmentManager(),"datePicker");
+			
 			}
 		});
 		GetRecordsTask listItem = new GetRecordsTask();
@@ -104,7 +118,7 @@ public class IncomeActivity extends Activity {
 			dbApi.addHeader("X-DreamFactory-Session-Token", session_id);
 			dbApi.setBasePath(dsp_url);
 			try {
-				Records records = dbApi.getRecords(IAppConstants.TABLE_NAME, null, "complete=1", null, null, null, null, null, true, null, null);
+				Records records = dbApi.getRecords(IAppConstants.TABLE_NAME, null, "tipo='r'", null, null, null, null, null, true, null, null);
 				log(records.toString());
 				return records;
 			} catch (Exception e) {
@@ -125,7 +139,7 @@ public class IncomeActivity extends Activity {
 				//soma os valores das receitas e coloca na tela
 
 				for (Record rec:records.getRecord()){
-					total += Float.parseFloat(rec.getName());
+					total += Float.parseFloat(rec.getValor());
 				}
 				
 				totalIncome.setText("Total Receita: "+total.toString());
@@ -148,10 +162,14 @@ public class IncomeActivity extends Activity {
 
 		@Override
 		protected Record doInBackground(String... params) {
-			String todoItem = params[0];
+			String valor = params[0];
+			String data = params[1];
+			String cat = params[2];
 			Record record = new Record();
-			record.setName(todoItem);
-			record.setComplete(true);
+			record.setValor(valor);
+			record.setTipo("r"); //receita
+			record.setData(data);
+			record.setCategoria(cat);
 
 			DbApi dbApi = new DbApi();
 			dbApi.setBasePath(dsp_url);
@@ -160,7 +178,7 @@ public class IncomeActivity extends Activity {
 			try {
 				String id = ""+System.currentTimeMillis();
 				Record resultRecord = dbApi.createRecord(IAppConstants.TABLE_NAME, id, null, record, null, null);
-				resultRecord.setName(todoItem);
+				resultRecord.setValor(valor);
 				log(resultRecord.toString());
 				return resultRecord;
 			} catch (Exception e) {
@@ -177,7 +195,7 @@ public class IncomeActivity extends Activity {
 				adapter.notifyDataSetChanged();
 				editTextAddTask.setText("");
 				
-				total += Float.parseFloat(record.getName());
+				total += Float.parseFloat(record.getValor());
 				totalIncome.setText("Total Receita: "+total.toString());
 			}else {				
 				Toast.makeText(IncomeActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
@@ -188,4 +206,43 @@ public class IncomeActivity extends Activity {
 	private void log(String message){
 		System.out.println("log: " + message);
 	}
+	
+	public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener{
+		
+		private Calendar cal = Calendar.getInstance();
+		
+		@Override
+		public Dialog onCreateDialog(Bundle savedInstanceState){
+			final Calendar c = 	Calendar.getInstance();
+			int year = c.get(Calendar.YEAR);
+			int month = c.get(Calendar.MONTH);
+			int day = c.get(Calendar.DAY_OF_MONTH);
+			return new DatePickerDialog(getActivity(), this, year, month, day);
+		}
+
+		@Override
+		public void onDateSet(DatePicker view, int year, int month, int day) {
+			view.updateDate(year,month,day);
+			cal.set(year,month,day);
+			changeDateButton();
+
+
+			
+		}
+		
+		
+
+		public Calendar getCalendar(){
+			return cal;
+		}
+	}
+	
+	public static void changeDateButton() {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		buttonDate.setText(sdf.format(df.getCalendar().getTime()));
+		
+	}
+	
 }
+
+

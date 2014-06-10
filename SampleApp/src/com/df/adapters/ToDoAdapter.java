@@ -98,13 +98,13 @@ public class ToDoAdapter extends BaseAdapter {
 			}
 		});
 
-		holder.tv_task.setText(record.getName());
-		if (record.iscomplete()){
-			holder.tv_task.setPaintFlags(holder.tv_task.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
-		}
-		else {
-			holder.tv_task.setPaintFlags((holder.tv_task.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)));
-		}
+		holder.tv_task.setText(record.getValor());
+//		if (record.iscomplete()){
+//			holder.tv_task.setPaintFlags(holder.tv_task.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
+//		}
+//		else {
+//			holder.tv_task.setPaintFlags((holder.tv_task.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)));
+//		}
 		return convertView;
 	}	
 
@@ -153,7 +153,7 @@ public class ToDoAdapter extends BaseAdapter {
 		@Override
 		protected String doInBackground(Object... params) {
 			Record record = (Record)params[0];
-			record.setComplete(!record.iscomplete());
+			//record.setComplete(!record.iscomplete());
 			DbApi dbApi = new DbApi();
 			dbApi.setBasePath(dsp_url);
 			dbApi.addHeader("X-DreamFactory-Application-Name", IAppConstants.APP_NAME);

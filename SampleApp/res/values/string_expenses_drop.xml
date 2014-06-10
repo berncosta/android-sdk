@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="exp_cat">
+        <item>Combustivel</item>
+        <item>Transporte</item>
+        <item>Educação</item>
+        <item>Comer Fora</item>
+        <item>Mercado</item>
+        <item>Presente</item>
+        <item>Saúde</item>
+        <item>Energia</item>
+        <item>Água</item>
+        <item>Telefone</item>
+        <item>Aluguel</item>
+        <item>Roupas</item>
+        <item>Outros</item>
+    </string-array>
+</resources>

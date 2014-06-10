@@ -14,7 +14,8 @@
     <string name="edit_pass">Insira a senha</string>
     <string name="btn_login">Entrar</string>
     <string name="list_view_tital">Minha Bufunfa</string>
-    <string name="add_item">Adicionar</string>
+    <string name="add_item">Valor</string>
+    <string name="add_btn">Adicionar</string>
     <string name="logout">Sair</string>
     <string name="dsp_url">Enter DSP URL</string>
     <string name="dsp_null">Enter DSP url</string>

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LinearLayout1"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/bg"
+    android:orientation="vertical"
     android:paddingLeft="20dp"
     android:paddingRight="20dp"
     android:paddingTop="5dp" >
@@ -11,63 +13,73 @@
         android:id="@+id/textView_tital"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_marginBottom="5dp"
         android:text="@string/list_view_tital"
         android:textSize="20sp" />
-
-    <ListView
-        android:id="@+id/list_view_strik_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/newlayout"
-        android:layout_below="@id/textView_tital"
-        android:background="@drawable/rectangel"
-        android:scrollbars="none"
-        android:padding="1.5dp"/>
 
     <LinearLayout
         android:id="@+id/layout_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/newlayout"
         android:orientation="horizontal"
-        android:weightSum="2" >
-
-        <Button
-            android:id="@+id/btnButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/add_item" />
-
-        <Button
-            android:id="@+id/btnLogout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/logout" />
-    </LinearLayout>
-
-    <RelativeLayout
-        android:id="@+id/newlayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/layout_button"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp" >
+        android:weightSum="3.5" >
 
         <EditText
             android:id="@+id/editText_add_task"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="2"
             android:background="@drawable/btnrectangel"
+            android:ems="10"
             android:hint="@string/add_item"
             android:inputType="numberDecimal"
             android:maxLines="1"
-            android:minHeight="40dp" />
+            android:minHeight="40dp" >
 
-    </RelativeLayout>
+            <requestFocus />
+        </EditText>
 
-</RelativeLayout>
+        <Button
+            android:id="@+id/btnAdd"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:text="@string/add_btn" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="3.5" >
+
+        <Spinner
+            android:id="@+id/spinnerCat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:contentDescription="Categorias"
+            android:entries="@array/exp_cat" />
+
+        <Button
+            android:id="@+id/btnDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:text="Data" />
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/list_view_strik_text"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="20dp"
+        android:layout_weight="1"
+        android:background="@drawable/rectangel"
+        android:padding="1.5dp"
+        android:scrollbars="none" >
+
+    </ListView>
+
+</LinearLayout>

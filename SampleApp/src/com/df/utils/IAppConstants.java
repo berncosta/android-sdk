@@ -4,7 +4,7 @@ public interface IAppConstants {
 	public String EMAIL = "email";
 	public String PWD = "password";
 	public String SESSION_ID = "session_id";
-	public String TABLE_NAME = "todo";
+	public String TABLE_NAME = "lancamento";
 	public String DSP_URL = "dsp_url";
 	public String TOKEN = "app_token";
 	public String LOGOUT = "logout";
