@@ -22,7 +22,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.df.adapters.ToDoAdapter;
-import com.df.ui.IncomeActivity.DatePickerFragment;
 import com.df.utils.IAppConstants;
 import com.df.utils.PrefUtil;
 import com.dreamfactory.api.DbApi;
