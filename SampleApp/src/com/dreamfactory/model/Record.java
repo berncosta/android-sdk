@@ -44,6 +44,9 @@ public class Record {
   public String getData() {
 	return data;
 }
+  public String getData(int i){
+	  return data.substring(0,i);
+  }
 public void setData(String data) {
 	this.data = data;
 }
@@ -62,6 +65,11 @@ public void setTipo(String tipo) {
 public String getCategoria() {
 	return categoria;
 }
+public String getCategoria(int i){
+	return categoria.substring(0,i)+".";
+	
+}
+
 public void setCategoria(String categoria) {
 	this.categoria = categoria;
 }

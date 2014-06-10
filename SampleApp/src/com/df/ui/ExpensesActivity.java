@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +31,7 @@ import com.dreamfactory.model.Records;
 
 public class ExpensesActivity extends Activity {
 	private static Button buttonAdd, buttonDate;
+	private Spinner spinnerCategoria;
 	private EditText editTextAddTask;
 	private ListView list_view;
 	private ProgressDialog progressDialog;
@@ -59,18 +61,22 @@ public class ExpensesActivity extends Activity {
 		progressDialog = new ProgressDialog(ExpensesActivity.this);
 		progressDialog.setMessage(getString((R.string.loading_message)));
 		list_view = (ListView) findViewById(R.id.list_view_strik_text);
+		spinnerCategoria = (Spinner) findViewById(R.id.spinnerCat);
 		editTextAddTask = (EditText) findViewById(R.id.editText_add_task);
 		buttonAdd = (Button) findViewById(R.id.btnAdd);
 		buttonAdd.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				String task = editTextAddTask.getText().toString();
-				if(task.length()==0){
+				String valor = editTextAddTask.getText().toString();
+				String data = buttonDate.getText().toString();
+				String cat = spinnerCategoria.getSelectedItem().toString();
+				
+				if(valor.length()==0 | data.length()==0 | cat.length()==0){
 					Toast.makeText(ExpensesActivity.this, getText(R.string.task_blank), Toast.LENGTH_SHORT).show();
 				}
 				else {
 					CreateRecordTask addToDoItem = new CreateRecordTask();
-					addToDoItem.execute(task);
+					addToDoItem.execute(valor,data,cat);
 					
 				}
 			}
@@ -158,10 +164,14 @@ public class ExpensesActivity extends Activity {
 
 		@Override
 		protected Record doInBackground(String... params) {
-			String todoItem = params[0];
+			String valor = params[0];
+			String data = params[1];
+			String cat = params[2];
 			Record record = new Record();
-			record.setValor(todoItem);
+			record.setValor(valor);
 			record.setTipo("d"); //despesa
+			record.setData(data);
+			record.setCategoria(cat);
 
 			DbApi dbApi = new DbApi();
 			dbApi.setBasePath(dsp_url);
@@ -170,7 +180,9 @@ public class ExpensesActivity extends Activity {
 			try {
 				String id = ""+System.currentTimeMillis();
 				Record resultRecord = dbApi.createRecord(IAppConstants.TABLE_NAME, id, null, record, null, null);
-				resultRecord.setValor(todoItem);
+				resultRecord.setValor(valor); //??
+				resultRecord.setData(data);
+				resultRecord.setCategoria(cat);
 				log(resultRecord.toString());
 				return resultRecord;
 			} catch (Exception e) {
@@ -219,11 +231,7 @@ public static class DatePickerFragment extends DialogFragment implements DatePic
 			cal.set(year,month,day);
 			changeDateButton();
 
-
-			
 		}
-		
-		
 
 		public Calendar getCalendar(){
 			return cal;

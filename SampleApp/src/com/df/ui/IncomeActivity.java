@@ -179,6 +179,8 @@ public class IncomeActivity extends Activity {
 				String id = ""+System.currentTimeMillis();
 				Record resultRecord = dbApi.createRecord(IAppConstants.TABLE_NAME, id, null, record, null, null);
 				resultRecord.setValor(valor);
+				resultRecord.setData(data);
+				resultRecord.setCategoria(cat);
 				log(resultRecord.toString());
 				return resultRecord;
 			} catch (Exception e) {

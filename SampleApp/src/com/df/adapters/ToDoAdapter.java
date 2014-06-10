@@ -98,7 +98,7 @@ public class ToDoAdapter extends BaseAdapter {
 			}
 		});
 
-		holder.tv_task.setText(record.getValor());
+		holder.tv_task.setText(record.getData(5)+" | "+record.getCategoria(4)+" | "+record.getValor());
 //		if (record.iscomplete()){
 //			holder.tv_task.setPaintFlags(holder.tv_task.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
 //		}
