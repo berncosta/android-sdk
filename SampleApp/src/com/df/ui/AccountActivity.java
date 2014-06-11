@@ -1,14 +1,6 @@
 package com.df.ui;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-
 import android.app.Activity;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -16,11 +8,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.df.adapters.ToDoAdapter;
@@ -30,26 +19,22 @@ import com.dreamfactory.api.DbApi;
 import com.dreamfactory.model.Record;
 import com.dreamfactory.model.Records;
 
-public class IncomeActivity extends Activity {
-	private static Button buttonAdd, buttonDate;
+public class AccountActivity extends Activity {
+	private Button buttonAdd,buttonLogout;
 	private EditText editTextAddTask;
-	private Spinner spinnerCategoria;
 	private ListView list_view;
 	private ProgressDialog progressDialog;
 	private ToDoAdapter adapter = null;
 	private String dsp_url;
 	private String session_id;
-	private TextView totalIncome;
-	Float total = (float) 0.00;
-	private static DatePickerFragment df = new DatePickerFragment();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		try{
-			//ActionBar actionbar = getActionBar();
-			//actionbar.setTitle("");
-			//actionbar.setIcon(R.drawable.df_logo_txt);
+//			ActionBar actionbar = getActionBar();
+//			actionbar.setTitle("");
+//			actionbar.setIcon(R.drawable.df_logo_txt);
 		}catch(Exception e){
 		}
 
@@ -57,45 +42,34 @@ public class IncomeActivity extends Activity {
 		dsp_url += IAppConstants.DSP_URL_SUFIX;
 		session_id = PrefUtil.getString(getApplicationContext(), IAppConstants.SESSION_ID);
 
-		setContentView(R.layout.activity_income);
-		totalIncome = (TextView) findViewById(R.id.textView_tital);
-		progressDialog = new ProgressDialog(IncomeActivity.this);
+		setContentView(R.layout.activity_account);
+		progressDialog = new ProgressDialog(AccountActivity.this);
 		progressDialog.setMessage(getString((R.string.loading_message)));
 		list_view = (ListView) findViewById(R.id.list_view_strik_text);
 		editTextAddTask = (EditText) findViewById(R.id.editText_add_task);
-		spinnerCategoria = (Spinner) findViewById(R.id.spinnerCat);
 		buttonAdd = (Button) findViewById(R.id.btnAdd);
+		buttonLogout = (Button)findViewById(R.id.btnLogout);
 		buttonAdd.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				String valor = editTextAddTask.getText().toString();
-				String data = buttonDate.getText().toString();
-				String cat = spinnerCategoria.getSelectedItem().toString();
-				if(valor.length()==0 || data.length()==0 || data.length()<5 || cat.length()==0){
-					Toast.makeText(IncomeActivity.this, getText(R.string.task_blank), Toast.LENGTH_SHORT).show();
+				String task = editTextAddTask.getText().toString();
+				if(task.length()==0){
+					Toast.makeText(AccountActivity.this, getText(R.string.task_blank), Toast.LENGTH_SHORT).show();
 				}
 				else {
 					CreateRecordTask addToDoItem = new CreateRecordTask();
-					addToDoItem.execute(valor, data, cat);
+					addToDoItem.execute(task);
 				}
 			}
 		});
-		buttonDate = (Button) findViewById(R.id.btnDate);
-		buttonDate.setOnClickListener(new OnClickListener(){
+		buttonLogout.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(View v){
-				df.show(getFragmentManager(),"datePicker");
-			
+			public void onClick(View v) {
+				logout();
 			}
 		});
 		GetRecordsTask listItem = new GetRecordsTask();
 		listItem.execute();
-	}
-	
-	public void onBackPressed(){
-		Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-		setResult(RESULT_CANCELED, intent);
-		finish();
 	}
 
 
@@ -126,7 +100,7 @@ public class IncomeActivity extends Activity {
 			dbApi.addHeader("X-DreamFactory-Session-Token", session_id);
 			dbApi.setBasePath(dsp_url);
 			try {
-				Records records = dbApi.getRecords(IAppConstants.TABLE_NAME, null, "tipo='r'", null, null, "data%20DESC", null, null, true, null, null);
+				Records records = dbApi.getRecords(IAppConstants.TABLE_NAME, null, null, null, null, null, null, null, true, null, null);
 				log(records.toString());
 				return records;
 			} catch (Exception e) {
@@ -141,18 +115,8 @@ public class IncomeActivity extends Activity {
 				progressDialog.cancel();
 			}
 			if(records != null){ // success
-				adapter = new ToDoAdapter(IncomeActivity.this, records.getRecord());
+				adapter = new ToDoAdapter(AccountActivity.this, records.getRecord());
 				list_view.setAdapter(adapter);
-				
-				//soma os valores das receitas e coloca na tela
-
-				for (Record rec:records.getRecord()){
-					total += Float.parseFloat(rec.getValor());
-				}
-				
-				totalIncome.setText("Total Receita: "+total.toString());
-				
-				
 			}else{ // some error show dialog
 				Toast.makeText(getApplicationContext(), errorMsg, Toast.LENGTH_LONG).show();
 				logout();
@@ -170,23 +134,9 @@ public class IncomeActivity extends Activity {
 
 		@Override
 		protected Record doInBackground(String... params) {
-			String valor = params[0];
-			String data = params[1]; //no formato do app
-			String cat = params[2];
+			String todoItem = params[0];
 			Record record = new Record();
-			record.setValor(valor);
-			record.setTipo("r"); //receita
-			SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM/yyyy");
-			SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
-			Date pData = new Date(0);
-			try {
-				pData = sdf1.parse(data);
-			} catch (ParseException e1) {
-				e1.printStackTrace();
-			}
-			String sData = sdf2.format(pData);
-			record.setData(pData); //no formato do DB
-			record.setCategoria(cat);
+			record.setValor(todoItem);
 
 			DbApi dbApi = new DbApi();
 			dbApi.setBasePath(dsp_url);
@@ -195,9 +145,7 @@ public class IncomeActivity extends Activity {
 			try {
 				String id = ""+System.currentTimeMillis();
 				Record resultRecord = dbApi.createRecord(IAppConstants.TABLE_NAME, id, null, record, null, null);
-				resultRecord.setValor(valor);
-				resultRecord.setData(pData);
-				resultRecord.setCategoria(cat);
+				resultRecord.setValor(todoItem);
 				log(resultRecord.toString());
 				return resultRecord;
 			} catch (Exception e) {
@@ -213,11 +161,8 @@ public class IncomeActivity extends Activity {
 				adapter.addTask(record);
 				adapter.notifyDataSetChanged();
 				editTextAddTask.setText("");
-				
-				total += Float.parseFloat(record.getValor());
-				totalIncome.setText("Total Receita: "+total.toString());
 			}else {				
-				Toast.makeText(IncomeActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
+				Toast.makeText(AccountActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
 			}
 		}
 	}
@@ -225,39 +170,4 @@ public class IncomeActivity extends Activity {
 	private void log(String message){
 		System.out.println("log: " + message);
 	}
-	
-	public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener{
-		
-		private Calendar cal = Calendar.getInstance();
-		
-		@Override
-		public Dialog onCreateDialog(Bundle savedInstanceState){
-			final Calendar c = 	Calendar.getInstance();
-			int year = c.get(Calendar.YEAR);
-			int month = c.get(Calendar.MONTH);
-			int day = c.get(Calendar.DAY_OF_MONTH);
-			return new DatePickerDialog(getActivity(), this, year, month, day);
-		}
-
-		@Override
-		public void onDateSet(DatePicker view, int year, int month, int day) {
-			view.updateDate(year,month,day);
-			cal.set(year,month,day);
-			changeDateButton();
-	
-		}
-
-		public Calendar getCalendar(){
-			return cal;
-		}
-	}
-	
-	public static void changeDateButton() {
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		buttonDate.setText(sdf.format(df.getCalendar().getTime()));
-		
-	}
-	
 }
-
-

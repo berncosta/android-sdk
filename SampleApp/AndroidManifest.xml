@@ -37,7 +37,7 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="IncomeActivity"
+            android:name="com.df.ui.IncomeActivity"
             android:label="@string/title_activity_income"
             android:parentActivityName="com.df.ui.MainActivity" >
             <meta-data
@@ -45,12 +45,16 @@
                 android:value="com.df.ui.MainActivity" />
         </activity>
         <activity
-            android:name="ExpensesActivity"
+            android:name="com.df.ui.ExpensesActivity"
             android:label="@string/title_activity_expenses"
             android:parentActivityName="com.df.ui.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.df.ui.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.df.ui.AccountActivity"
+            android:label="@string/title_activity_account" >
         </activity>
     </application>
 

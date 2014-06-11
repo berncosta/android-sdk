@@ -166,20 +166,21 @@ public class ExpensesActivity extends Activity {
 		@Override
 		protected Record doInBackground(String... params) {
 			String valor = params[0];
-			String data = params[1];
+			String data = params[1]; //no formato do app
 			String cat = params[2];
 			Record record = new Record();
 			record.setValor(valor);
 			record.setTipo("d"); //despesa
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM/yyyy");
+			SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
 			Date pData = new Date(0);
 			try {
-				pData = sdf.parse(data);
+				pData = sdf1.parse(data);
 			} catch (ParseException e1) {
 				e1.printStackTrace();
 			}
-			String sData = sdf.format(pData);
-			record.setData(sData);
+			String sData = sdf2.format(pData); //no formato do DB
+			record.setData(pData);
 			record.setCategoria(cat);
 
 			DbApi dbApi = new DbApi();
@@ -190,7 +191,7 @@ public class ExpensesActivity extends Activity {
 				String id = ""+System.currentTimeMillis();
 				Record resultRecord = dbApi.createRecord(IAppConstants.TABLE_NAME, id, null, record, null, null);
 				resultRecord.setValor(valor); //??
-				resultRecord.setData(data);
+				resultRecord.setData(pData);
 				resultRecord.setCategoria(cat);
 				log(resultRecord.toString());
 				return resultRecord;

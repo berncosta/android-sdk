@@ -24,5 +24,6 @@
     <string name="title_activity_expenses">ExpensesActivity</string>
     <string name="btn_income">Receitas</string>
     <string name="btn_expenses">Despesas</string>
+    <string name="title_activity_account">AccountActivity</string>
 
 </resources>

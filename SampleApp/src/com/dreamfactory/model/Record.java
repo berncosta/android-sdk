@@ -16,7 +16,7 @@ public class Record {
   private String id;
   
   @JsonProperty("data")
-  private String data;
+  private Date data;
   
   @JsonProperty("carteira")
   private String carteira;
@@ -47,21 +47,21 @@ public class Record {
 
   public String getData() {
 	SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM/yyyy");
-	SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
-	Date pData = new Date(0);
-	try {
-		pData = sdf2.parse(data);
-	} catch (ParseException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-	String sData = sdf1.format(pData);
+//	SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+//	Date pData = new Date(0);
+//	try {
+//		pData = sdf2.parse(data);
+//	} catch (ParseException e) {
+//		// TODO Auto-generated catch block
+//		e.printStackTrace();
+//	}
+	String sData = sdf1.format(data);
 	return sData;
 }
   public String getData(int i){
 	  return this.getData().substring(0,i);
   }
-public void setData(String data) {
+public void setData(Date data) {
 	this.data = data;
 }
 public String getCarteira() {

@@ -82,17 +82,8 @@ public class MainActivity extends Activity {
 		listItem.execute();
 
 	}
-	
-	public void onRestart(Bundle savedInstanceState){
-		GetRecordsTask listItem = new GetRecordsTask();
-		listItem.execute();
-	}
-	
-	public void onResume(Bundle savedInstanceState){
-		GetRecordsTask listItem = new GetRecordsTask();
-		listItem.execute();
-	}
-	
+
+
 	class GetRecordsTask extends AsyncTask<Void, Records, Records>{
 		private String errorMsg;
 
@@ -125,6 +116,8 @@ public class MainActivity extends Activity {
 			if(records != null){ // success
 				
 				//soma os valores das receitas e coloca na tela
+				totalReceita = (float) 0;
+				totalDespesa = (float) 0;
 
 				for (Record rec:records.getRecord()){
 					if (rec.getTipo().equals("r")) {
@@ -149,11 +142,16 @@ public class MainActivity extends Activity {
 		}
 	}
 	
+	protected void onActivityResult(int requestCode, int resultCode, Intent intent ){
+		GetRecordsTask listItem = new GetRecordsTask();
+		listItem.execute();
+	}
+	
 	private void goToIncome() {
 		// TODO Auto-generated method stub
 		
 		Intent intent = new Intent(getApplicationContext(), IncomeActivity.class);
-		startActivity(intent);
+		startActivityForResult(intent, 0);
 		//finish();
 		
 	}
@@ -162,7 +160,7 @@ public class MainActivity extends Activity {
 		// TODO Auto-generated method stub
 		
 		Intent intent = new Intent(getApplicationContext(), ExpensesActivity.class);
-		startActivity(intent);
+		startActivityForResult(intent, 0);
 		
 	}
 
