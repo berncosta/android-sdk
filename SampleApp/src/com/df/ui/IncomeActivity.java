@@ -42,6 +42,7 @@ public class IncomeActivity extends Activity {
 	private TextView totalIncome;
 	Float total = (float) 0.00;
 	private static DatePickerFragment df = new DatePickerFragment();
+	private String accSel;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +53,9 @@ public class IncomeActivity extends Activity {
 			//actionbar.setIcon(R.drawable.df_logo_txt);
 		}catch(Exception e){
 		}
+		
+		Intent intent = getIntent();
+		accSel = intent.getStringExtra("ACC");
 
 		dsp_url = PrefUtil.getString(getApplicationContext(), IAppConstants.DSP_URL);
 		dsp_url += IAppConstants.DSP_URL_SUFIX;
@@ -126,7 +130,8 @@ public class IncomeActivity extends Activity {
 			dbApi.addHeader("X-DreamFactory-Session-Token", session_id);
 			dbApi.setBasePath(dsp_url);
 			try {
-				Records records = dbApi.getRecords(IAppConstants.TABLE_NAME, null, "tipo='r'", null, null, "data%20DESC", null, null, true, null, null);
+				String filter = "tipo='r'%20AND%20cart1='"+accSel+"'";
+				Records records = dbApi.getRecords(IAppConstants.TABLE_NAME, null, filter, null, null, "data%20DESC", null, null, true, null, null);
 				log(records.toString());
 				return records;
 			} catch (Exception e) {
@@ -176,6 +181,7 @@ public class IncomeActivity extends Activity {
 			Record record = new Record();
 			record.setValor(valor);
 			record.setTipo("r"); //receita
+			record.setCart1(accSel);
 			SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM/yyyy");
 
 			Date pData = new Date(0);
