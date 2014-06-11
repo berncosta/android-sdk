@@ -177,14 +177,14 @@ public class IncomeActivity extends Activity {
 			record.setValor(valor);
 			record.setTipo("r"); //receita
 			SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM/yyyy");
-			SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+
 			Date pData = new Date(0);
 			try {
 				pData = sdf1.parse(data);
 			} catch (ParseException e1) {
 				e1.printStackTrace();
 			}
-			String sData = sdf2.format(pData);
+
 			record.setData(pData); //no formato do DB
 			record.setCategoria(cat);
 

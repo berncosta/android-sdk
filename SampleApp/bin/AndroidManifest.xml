@@ -54,7 +54,11 @@
         </activity>
         <activity
             android:name="com.df.ui.AccountActivity"
-            android:label="@string/title_activity_account" >
+            android:label="@string/title_activity_account"
+            android:parentActivityName="com.df.ui.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.df.ui.MainActivity" />
         </activity>
     </application>
 

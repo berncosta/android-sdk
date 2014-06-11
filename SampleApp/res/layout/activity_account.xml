@@ -36,11 +36,11 @@
         android:weightSum="2" >
 
         <Button
-            android:id="@+id/btnButton"
-            android:layout_width="wrap_content"
+            android:id="@+id/btnAdd"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/add_item" />
+            android:text="@string/add_btn" />
     </LinearLayout>
 
     <RelativeLayout
@@ -56,7 +56,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/btnrectangel"
-            android:hint="@string/add_item"
+            android:hint="Nova carteira"
             android:minHeight="40dp"
             android:inputType="textNoSuggestions"
             android:maxLines="1" />

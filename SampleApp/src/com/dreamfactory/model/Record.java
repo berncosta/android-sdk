@@ -1,6 +1,5 @@
 package com.dreamfactory.model;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,6 +19,9 @@ public class Record {
   
   @JsonProperty("carteira")
   private String carteira;
+  
+  @JsonProperty("cart1")
+  private String cart1;
   
   @JsonProperty("tipo")
   private String tipo;
@@ -69,6 +71,12 @@ public String getCarteira() {
 }
 public void setCarteira(String carteira) {
 	this.carteira = carteira;
+}
+public String getCart1(){
+	return cart1;
+}
+public void setCart1(String cart1){
+	this.cart1 = cart1;
 }
 public String getTipo() {
 	return tipo;

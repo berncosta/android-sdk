@@ -1,5 +1,7 @@
 package com.df.ui;
 
+import java.util.Calendar;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -12,7 +14,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.df.adapters.ToDoAdapter;
+import com.df.adapters.AccAdapter;
 import com.df.utils.IAppConstants;
 import com.df.utils.PrefUtil;
 import com.dreamfactory.api.DbApi;
@@ -20,11 +22,11 @@ import com.dreamfactory.model.Record;
 import com.dreamfactory.model.Records;
 
 public class AccountActivity extends Activity {
-	private Button buttonAdd,buttonLogout;
+	private Button buttonAdd;
 	private EditText editTextAddTask;
 	private ListView list_view;
 	private ProgressDialog progressDialog;
-	private ToDoAdapter adapter = null;
+	private AccAdapter adapter = null;
 	private String dsp_url;
 	private String session_id;
 
@@ -48,7 +50,6 @@ public class AccountActivity extends Activity {
 		list_view = (ListView) findViewById(R.id.list_view_strik_text);
 		editTextAddTask = (EditText) findViewById(R.id.editText_add_task);
 		buttonAdd = (Button) findViewById(R.id.btnAdd);
-		buttonLogout = (Button)findViewById(R.id.btnLogout);
 		buttonAdd.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -60,12 +61,6 @@ public class AccountActivity extends Activity {
 					CreateRecordTask addToDoItem = new CreateRecordTask();
 					addToDoItem.execute(task);
 				}
-			}
-		});
-		buttonLogout.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				logout();
 			}
 		});
 		GetRecordsTask listItem = new GetRecordsTask();
@@ -100,7 +95,7 @@ public class AccountActivity extends Activity {
 			dbApi.addHeader("X-DreamFactory-Session-Token", session_id);
 			dbApi.setBasePath(dsp_url);
 			try {
-				Records records = dbApi.getRecords(IAppConstants.TABLE_NAME, null, null, null, null, null, null, null, true, null, null);
+				Records records = dbApi.getRecords(IAppConstants.TABLE_NAME, null, "tipo='c'", null, null, null, null, null, true, null, null);
 				log(records.toString());
 				return records;
 			} catch (Exception e) {
@@ -115,7 +110,7 @@ public class AccountActivity extends Activity {
 				progressDialog.cancel();
 			}
 			if(records != null){ // success
-				adapter = new ToDoAdapter(AccountActivity.this, records.getRecord());
+				adapter = new AccAdapter(AccountActivity.this, records.getRecord());
 				list_view.setAdapter(adapter);
 			}else{ // some error show dialog
 				Toast.makeText(getApplicationContext(), errorMsg, Toast.LENGTH_LONG).show();
@@ -137,6 +132,9 @@ public class AccountActivity extends Activity {
 			String todoItem = params[0];
 			Record record = new Record();
 			record.setValor(todoItem);
+			record.setTipo("c");
+			Calendar cal = Calendar.getInstance();
+			record.setData(cal.getTime());
 
 			DbApi dbApi = new DbApi();
 			dbApi.setBasePath(dsp_url);

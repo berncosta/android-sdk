@@ -1,5 +1,8 @@
 package com.df.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -7,7 +10,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,8 +24,9 @@ import com.dreamfactory.api.DbApi;
 import com.dreamfactory.model.Record;
 import com.dreamfactory.model.Records;
 
-public class MainActivity extends Activity {
-	private Button buttonIncome,buttonExpenses,buttonLogout;
+public class MainActivity extends Activity implements OnItemSelectedListener{
+	private Button buttonIncome,buttonExpenses,buttonLogout,buttonAccount;
+	private Spinner spinAcc;
 	private ProgressDialog progressDialog;
 	private String dsp_url;
 	private String session_id;
@@ -26,6 +34,7 @@ public class MainActivity extends Activity {
 	private Float totalReceita = (float) 0.00;
 	private Float totalDespesa = (float) 0.00;
 	private Float saldo = (float) 0.00;
+	List<String> accs = new ArrayList<String>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +58,10 @@ public class MainActivity extends Activity {
 		buttonIncome = (Button) findViewById(R.id.btnIncome);
 		buttonExpenses = (Button) findViewById(R.id.btnExpenses);
 		buttonLogout = (Button) findViewById(R.id.btnLogout);
+		buttonAccount = (Button) findViewById(R.id.btnAcc);
+		
+		spinAcc = (Spinner) findViewById(R.id.spinnerAcc);
+		spinAcc.setOnItemSelectedListener(this);
 		
 		tvSaldo = (TextView) findViewById(R.id.textViewSaldo);
 		tvReceitas = (TextView) findViewById(R.id.textViewReceitas);
@@ -77,9 +90,25 @@ public class MainActivity extends Activity {
 				logout();
 			}
 		});
+		buttonAccount.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v){
+				goToAccounts();
+			}
+		});
 		
 		GetRecordsTask listItem = new GetRecordsTask();
 		listItem.execute();
+
+	}
+	
+	public void onItemSelected(AdapterView<?> parent, View view, int pos, long id){
+		String item = (String) parent.getItemAtPosition(pos);
+		System.out.println(item);
+
+	}
+	
+	public void onNothingSelected(AdapterView<?> parent){
 
 	}
 
@@ -118,14 +147,24 @@ public class MainActivity extends Activity {
 				//soma os valores das receitas e coloca na tela
 				totalReceita = (float) 0;
 				totalDespesa = (float) 0;
+				
+				accs.clear();
 
 				for (Record rec:records.getRecord()){
 					if (rec.getTipo().equals("r")) {
 							totalReceita += Float.parseFloat(rec.getValor());
-					} else {
+					} else if (rec.getTipo().equals("d")) {
 						totalDespesa += Float.parseFloat(rec.getValor());
+					} else if (rec.getTipo().equals("c")) {
+						accs.add(rec.getValor());						
 					}
 				}
+				
+				ArrayAdapter<String> spinAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.spinner_item, accs);
+				
+				spinAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+				
+				spinAcc.setAdapter(spinAdapter);
 				
 				tvReceitas.setText(totalReceita.toString());
 				tvDespesas.setText("-"+totalDespesa.toString());
@@ -148,7 +187,7 @@ public class MainActivity extends Activity {
 	}
 	
 	private void goToIncome() {
-		// TODO Auto-generated method stub
+
 		
 		Intent intent = new Intent(getApplicationContext(), IncomeActivity.class);
 		startActivityForResult(intent, 0);
@@ -157,11 +196,16 @@ public class MainActivity extends Activity {
 	}
 	
 	private void goToExpenses() {
-		// TODO Auto-generated method stub
+
 		
 		Intent intent = new Intent(getApplicationContext(), ExpensesActivity.class);
 		startActivityForResult(intent, 0);
 		
+	}
+	
+	private void goToAccounts(){
+		Intent intent = new Intent(getApplicationContext(), AccountActivity.class);
+		startActivityForResult(intent, 0);
 	}
 
 

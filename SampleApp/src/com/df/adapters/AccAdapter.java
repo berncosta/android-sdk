@@ -21,7 +21,7 @@ import com.dreamfactory.api.DbApi;
 import com.dreamfactory.client.ApiException;
 import com.dreamfactory.model.Record;
 
-public class ToDoAdapter extends BaseAdapter { 
+public class AccAdapter extends BaseAdapter { 
 	private LayoutInflater inflater;
 	private Context context;
 	private ToDoHolder holder=  null;
@@ -30,7 +30,7 @@ public class ToDoAdapter extends BaseAdapter {
 	private String session_id;
 	private String dsp_url;
 	
-	public ToDoAdapter(Context context, List<Record> records) {
+	public AccAdapter(Context context, List<Record> records) {
 		this.records = records;
 		this.context = context;
 		this.session_id = PrefUtil.getString(context, IAppConstants.SESSION_ID, "");
@@ -97,7 +97,7 @@ public class ToDoAdapter extends BaseAdapter {
 			}
 		});
 
-		holder.tv_task.setText(record.getData(5)+" | "+record.getCategoria(4)+" | "+record.getValor());
+		holder.tv_task.setText(record.getValor());
 //		if (record.iscomplete()){
 //			holder.tv_task.setPaintFlags(holder.tv_task.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
 //		}

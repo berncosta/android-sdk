@@ -172,14 +172,13 @@ public class ExpensesActivity extends Activity {
 			record.setValor(valor);
 			record.setTipo("d"); //despesa
 			SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM/yyyy");
-			SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
 			Date pData = new Date(0);
 			try {
 				pData = sdf1.parse(data);
 			} catch (ParseException e1) {
 				e1.printStackTrace();
 			}
-			String sData = sdf2.format(pData); //no formato do DB
+
 			record.setData(pData);
 			record.setCategoria(cat);
 
